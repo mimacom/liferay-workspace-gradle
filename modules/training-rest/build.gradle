@@ -4,6 +4,7 @@ plugins {
 
 dependencies {
     swaggerCodegen 'io.swagger.codegen.v3:swagger-codegen-cli:3.0.0'  // Swagger Codegen V3
+    swaggerUI 'org.webjars:swagger-ui:3.10.0'
 }
 
 dependencies {
@@ -30,8 +31,13 @@ swaggerSources {
                     'dateLibrary' : 'java8'
             ]
         }
+        ui {
+            outputDir = file("${buildDir}/swagger-ui-training/doc")
+        }
     }
 }
 compileJava.dependsOn swaggerSources.training.code
+compileJava.dependsOn swaggerSources.training.ui
 sourceSets.main.java.srcDir "${swaggerSources.training.code.outputDir}/src/gen/java"
 sourceSets.main.resources.srcDir "${swaggerSources.training.code.outputDir}/src/main/resources"
+sourceSets.main.resources.srcDir "${buildDir}/swagger-ui-training"

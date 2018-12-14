@@ -1,18 +1,18 @@
 openapi: "3.0.0"
 info:
   version: 1.0.0
-  title: Swagger Petstore
+  title: Mimacom Training
   license:
     name: MIT
 servers:
-  - url: http://localhost:8080/o/api/v1
+  - url: http://localhost:8080/o/training/api/v1
 paths:
-  /pets:
+  /todos:
     get:
-      summary: List all pets
-      operationId: listPets
+      summary: List all todos
+      operationId: listTodos
       tags:
-        - pets
+        - todos
       parameters:
         - name: limit
           in: query
@@ -23,7 +23,7 @@ paths:
             format: int32
       responses:
         '200':
-          description: A paged array of pets
+          description: A paged array of todos
           headers:
             x-next:
               description: A link to the next page of responses
@@ -32,7 +32,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Pets"
+                $ref: "#/components/schemas/Todos"
         default:
           description: unexpected error
           content:
@@ -40,39 +40,47 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
     post:
-      summary: Create a pet
-      operationId: createPets
+      summary: Create a todo
+      operationId: createTodo
       tags:
-        - pets
+        - todos
+      requestBody:
+        description: Todo to add to the store
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewTodo'
       responses:
         '201':
-          description: Null response
+          description: Created
         default:
           description: unexpected error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /pets/{petId}:
+  /todos/{todoId}:
     get:
-      summary: Info for a specific pet
-      operationId: showPetById
+      summary: Info for a specific todo
+      operationId: getTodoById
       tags:
-        - pets
+        - todos
       parameters:
-        - name: petId
+        - name: todoId
           in: path
           required: true
-          description: The id of the pet to retrieve
+          description: The id of the todo to retrieve
           schema:
-            type: string
+            type: integer
+            format: int64
       responses:
         '200':
-          description: Expected response to a valid request
+          description: The requested todo
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Pets"
+                $ref: "#/components/schemas/Todo"
         default:
           description: unexpected error
           content:
@@ -81,22 +89,37 @@ paths:
                 $ref: "#/components/schemas/Error"
 components:
   schemas:
-    Pet:
+    Todo:
       required:
         - id
-        - name
+        - title
       properties:
         id:
           type: integer
           format: int64
-        name:
+        title:
+          type: string
+        description:
+          type: string
+        done:
+          type: boolean
+          default: false
+        tag:
+          type: string
+    NewTodo:
+      required:
+        - title
+      properties:
+        title:
+          type: string
+        description:
           type: string
         tag:
           type: string
-    Pets:
+    Todos:
       type: array
       items:
-        $ref: "#/components/schemas/Pet"
+        $ref: "#/components/schemas/Todo"
     Error:
       required:
         - code
