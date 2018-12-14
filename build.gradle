@@ -1,0 +1,23 @@
+plugins {
+    id 'nu.studer.credentials' version '1.0.4'
+}
+
+String liferayUsername = credentials.getProperty("liferayNexusUsername")
+String liferayPassword = credentials.getProperty("liferayNexusPassword")
+
+createToken {
+    emailAddress = liferayUsername
+    password = liferayPassword
+}
+
+allprojects {
+    repositories {
+        maven {
+            credentials {
+                username liferayUsername
+                password liferayPassword
+            }
+            url "https://repository-cdn.liferay.com/nexus/service/local/repositories/liferay-private-releases/content/"
+        }
+    }
+}

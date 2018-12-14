@@ -1,0 +1,7 @@
+Bundle-Name: Mimacom Training REST
+Bundle-SymbolicName: com.mimacom.training.rest
+Bundle-Version: 1.0.0
+
+Import-Package: !javax.validation.constraints,\
+                !javax.activation,\
+                *

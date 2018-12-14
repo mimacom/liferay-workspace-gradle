@@ -1,0 +1,37 @@
+plugins {
+    id 'org.hidetake.swagger.generator' version '2.15.1'
+}
+
+dependencies {
+    swaggerCodegen 'io.swagger.codegen.v3:swagger-codegen-cli:3.0.0'  // Swagger Codegen V3
+}
+
+dependencies {
+    compileOnly group: "javax.ws.rs", name: "javax.ws.rs-api"
+    compileOnly group: "org.osgi", name: "org.osgi.service.component.annotations"
+    compileOnly group: "org.osgi", name: "org.osgi.service.jaxrs", version: "1.0.0"
+
+    compileOnly group: 'io.swagger.core.v3', name: 'swagger-annotations', version: '2.0.6'
+    compileOnly group: 'org.apache.cxf', name: 'cxf-rt-rs-service-description-swagger', version: '3.2.7'
+
+    compileInclude group: 'com.fasterxml.jackson.jaxrs', name: 'jackson-jaxrs-json-provider', version: '2.9.7'
+    compileInclude group: 'io.swagger.core.v3', name: 'swagger-annotations', version: '2.0.6'
+}
+
+swaggerSources {
+    training {
+        inputFile = file("${project.rootDir}/api/training.yaml")
+        code {
+            language = 'jaxrs-cxf'
+            additionalProperties = [
+                    'apiPackage'  : 'com.mimacom.training.rest.api',
+                    'modelPackage': 'com.mimacom.training.rest.model',
+                    'java8'       : 'true',
+                    'dateLibrary' : 'java8'
+            ]
+        }
+    }
+}
+compileJava.dependsOn swaggerSources.training.code
+sourceSets.main.java.srcDir "${swaggerSources.training.code.outputDir}/src/gen/java"
+sourceSets.main.resources.srcDir "${swaggerSources.training.code.outputDir}/src/main/resources"

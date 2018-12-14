@@ -1,0 +1,13 @@
+version: '3.1'
+services:
+  postgres:
+    image: postgres:10
+    container_name: mimacom-lr-db-postgres
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: mimacom
+      POSTGRES_PASSWORD: mimacom
+      POSTGRES_DB: mimacom
+
